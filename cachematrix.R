@@ -4,16 +4,19 @@
 ## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
-  inv <- NULL                             
-  set <- function(y) {                     
-    x <<- y                             
-    inv <<- NULL                        
-  }
-  get <- function() x                   
+  invMatrix <- NULL
   
-  setinverse <- function(inverse) inv <<- inverse
-  getinverse <- function() inv                   
-  list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)   
+  #set the value of the Matrix
+  setMatrix <- function(y) {
+    x <<- y
+    invMatrix <<- NULL
+  }
+  
+  getMatrix <- function() x                              #get the value of the Matrix
+  setInverse <- function(inverse) invMatrix <<- inverse  #set the value of the invertible matrix
+  getInverse <- function() invMatrix                     #get the value of the invertible matrix
+  list(setMatrix = setMatrix, getMatrix = getMatrix,
+       setInverse = setInverse, getInverse = getInverse)
   
 
 }
@@ -22,14 +25,19 @@ makeCacheMatrix <- function(x = matrix()) {
 ## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
-  inv <- x$getinverse()
-  if(!is.null(inv)) {
-    message("getting cached data")
-    return(inv)
+  
+  #get the value of the invertible matrix from the makeCacheMatrix function
+  invMatrix <- x$getInverse()
+  
+  if(!is.null(invMatrix)) {                       #if inverse matrix is not NULL
+    message("Getting Cached Invertible Matrix")   #Type message: Getting Cached Invertible Matrix 
+    return(invMatrix)                             #return the invertible matrix
   }
-  data <- x$get()
-  inv <- solve(data, ...)
-  x$setinverse(inv)
-  inv
+  
+  #if value of the invertible matrix is NULL then  
+  MatrixData <- x$getMatrix()                     #get the original Matrix Data 
+  invMatrix <- solve(MatrixData, ...)             #use solve function to inverse the matrix
+  x$setInverse(invMatrix)                         #set the invertible matrix 
+  return(invMatrix)                               #return the invertible matrix
+  ## Return a matrix that is the inverse of 'x'
 }
